@@ -141,6 +141,7 @@ void quickSort(int *V, int inicio, int fim){
 	}
 }
 // Heapsort
+/*
 void criaHeap(int *v, int i, int f){
 
 	int aux = v[i];
@@ -176,9 +177,51 @@ void heapSort(int *V, int n){
 		V[i] = aux;
 		criaHeap(V,0,i-1);
 	}	
+}*/
+void maxHeapify(int* v, int n){
+	for(int i = n/2; i >= 0; i--){
+		heapify(i, n, v);
+	}
 }
 
+void heapify(int head, int size, int* list){
+	
+	int max = head;
+	int left = head*2 + 1;
+	int right = head*2 + 2;
+	int aux;
 
+	if(left > size-1)
+		left = head;
+
+	if(right > size-1)
+		right = head;	
+
+	if(list[max] < list[left])
+		max = left;
+
+	if(list[max] < list[right])
+		max = right;
+
+	aux = list[max];
+	list[max] = list[head];
+	list[head] = aux;
+
+	if(max != head)
+		heapify(max, size, list);
+}
+
+void heapSort(int* v, int n){
+	
+	maxHeapify(v,n);
+	int aux;
+	for(int i = n-1; i > 0; i--){
+		heapify(0, i+1, v);
+		aux = v[0];
+		v[0] = v[i];
+		v[i] = aux;
+	}
+}
 void display( int *V, int n ){
 
 	for(int i = 0; i < n; i++){
@@ -211,27 +254,22 @@ int main(int argc, char * argv[]){
 	switch(numero){
 
 		case 1:
-			printf("\n\nVoce escolheu o  Selection sort");
 			selectionSort(vetor,tamanho);
 		break;
 		
 		case 2:
-			printf("\n\nVoce escolheu o  Insertion sort");
 			insertionSort(vetor,tamanho);
 		break;
 		
 		case 3:
-			printf("\n\nVoce escolheu o  Merge sort");
 			mergeSort(vetor,0,tamanho-1);
 		break;
 
 		case 4:
-			printf("\n\nVoce escolheu o  Quicksort");
 			quickSort(vetor,0,tamanho-1);
 		break;
 
 		case 5:
-			printf("\n\nVoce escolheu o  Heapsort");
 			heapSort(vetor,tamanho);
 		break;
 
