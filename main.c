@@ -141,48 +141,6 @@ void quickSort(int *V, int inicio, int fim){
 	}
 }
 // Heapsort
-/*
-void criaHeap(int *v, int i, int f){
-
-	int aux = v[i];
-	int j = i*2+1;
-	while(j<=f){
-
-		if(j<f){
-			if(v[j] < v[j+1]){
-				j = j+1;
-			}
-			if(aux < v[j]){
-				v[i] = v[j];
-				i = j;
-				j = 2*i+1;
-			}
-			else{
-				j = f+1;
-			}
-
-		}
-	}
-	v[i] = aux;
-}
-void heapSort(int *V, int n){
-	
-	int i, aux;
-	for(i = (n-1)/2; i>=0; i--){
-		criaHeap(V, i, n-1);
-	}
-	for( i = n-1; i >=1; i--){
-		aux = V[0];
-		V[0] = V[i];
-		V[i] = aux;
-		criaHeap(V,0,i-1);
-	}	
-}*/
-void maxHeapify(int* v, int n){
-	for(int i = n/2; i >= 0; i--){
-		heapify(i, n, v);
-	}
-}
 
 void heapify(int head, int size, int* list){
 	
@@ -209,6 +167,13 @@ void heapify(int head, int size, int* list){
 
 	if(max != head)
 		heapify(max, size, list);
+}
+
+
+void maxHeapify(int* v, int n){
+	for(int i = n/2; i >= 0; i--){
+		heapify(i, n, v);
+	}
 }
 
 void heapSort(int* v, int n){
