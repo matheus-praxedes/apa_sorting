@@ -14,11 +14,11 @@
 void selectionSort(int *V, int n){
 
 	int i, j, menor, troca;
-
+	
 	for(i = 0; i < n-1; i++){
 
 		menor = i;
-		for(j = i+1; j<n; j++){
+		for(j = i+1; j < n; j++){
 			if(V[j] < V[menor]){
 				menor = j;
 			}
@@ -141,9 +141,42 @@ void quickSort(int *V, int inicio, int fim){
 	}
 }
 // Heapsort
-//void heapSort(int *V, int n){
+void criaHeap(int *v, int i, int f){
+
+	int aux = v[i];
+	int j = i*2+1;
+	while(j<=f){
+
+		if(j<f){
+			if(v[j] < v[j+1]){
+				j = j+1;
+			}
+			if(aux < v[j]){
+				v[i] = v[j];
+				i = j;
+				j = 2*i+1;
+			}
+			else{
+				j = f+1;
+			}
+
+		}
+	}
+	v[i] = aux;
+}
+void heapSort(int *V, int n){
 	
-//}
+	int i, aux;
+	for(i = (n-1)/2; i>=0; i--){
+		criaHeap(V, i, n-1);
+	}
+	for( i = n-1; i >=1; i--){
+		aux = V[0];
+		V[0] = V[i];
+		V[i] = aux;
+		criaHeap(V,0,i-1);
+	}	
+}
 
 
 void display( int *V, int n ){
@@ -154,69 +187,66 @@ void display( int *V, int n ){
 	}
 	printf("\n");
 }	
+
+
 int main(int argc, char * argv[]){
 
 	int  numero = 0;
-	int  vetor[7]; 
-	int  contador = 0;
+	int tamanho;
+
+	scanf("%d",&tamanho);
+	int* vetor = (int*)calloc(tamanho,sizeof(int));
+
+	for(int i = 0; i < tamanho; i++){
+		
+		int el;
+		scanf("%d",&el);
+		vetor[i] = el;
+	}
 
 	
-	printf("\n 1 - Selection sort");
-	printf("\n 2 - Insertion sort");
-	printf("\n 3 - Merge sort");
-	printf("\n 4 - Quicksort");
-	printf("\n 5 - Heapsort");
-	printf("\n Escolha uma das opcoes acima: \n");
-	scanf("%d", &numero);
-
-
-	for(int i = 1; i < argc; i++){
-
-		//printf("\nargc: %d");
-		contador++;
-		vetor[i-1] = atoi(argv[i]);
-		//printf("\nvetor[%d]: %d",i,vetor[i]);
-	}
+	numero = atoi(argv[1]);
+	int i = 0;
 
 	switch(numero){
 
 		case 1:
 			printf("\n\nVoce escolheu o  Selection sort");
-			selectionSort(vetor,contador);
+			selectionSort(vetor,tamanho);
 		break;
 		
 		case 2:
 			printf("\n\nVoce escolheu o  Insertion sort");
-			insertionSort(vetor,contador);
+			insertionSort(vetor,tamanho);
 		break;
 		
 		case 3:
 			printf("\n\nVoce escolheu o  Merge sort");
-			mergeSort(vetor,0,6);
+			mergeSort(vetor,0,tamanho-1);
 		break;
 
 		case 4:
 			printf("\n\nVoce escolheu o  Quicksort");
-			quickSort(vetor,0,6);
+			quickSort(vetor,0,tamanho-1);
 		break;
 
 		case 5:
 			printf("\n\nVoce escolheu o  Heapsort");
-			//heapSort(vetor,contador);
+			heapSort(vetor,tamanho);
 		break;
 
 		default:
 			printf("\n\nValor invalido !!");
+			break;
 
 	}
 
-	printf("\n\n<<<Vetor ordenado>>>");
-	display(vetor,contador);
-	printf("\n\nFim do programa. Obrigado !");
+	display(vetor,tamanho);
+	free(vetor);
 
 	return 0;
 }
 
 
 
-// Falta : QUIT / MAKE / GENERALIZAR 
+
