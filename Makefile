@@ -1,4 +1,4 @@
-CC = gcc
+CC = g++
 
 all:
 	$(CC) main.c -o sorting

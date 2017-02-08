@@ -4,11 +4,62 @@
 * Áluno: Matheus Maranhão Rêgo Praxedes
 * Matrícula : 11403744
 * Data de entrega : 25 / 01 / 2017
+* Data de atualização : 07 / 02 / 2017
+*
+*Observações: As atualizações incluem a adição dos seguintes al-
+*goritmos: counting sort, radix sort e bucket sort para o ter-
+*ceriro trabralho de ordenação da disciplina. 
+* 
 *
 ****************************************************************/
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+//#define  RANGE 9918 // max - min + 1
+
+
+// Funções auxiliares 
+void display( int *V, int n ){
+
+	for(int i = 0; i < n; i++){
+
+		printf("\n %d", V[i]);
+	}
+	printf("\n");
+}	
+
+int compare (const void * a, const void * b)
+{
+  return ( *(int*)a - *(int*)b );
+}
+
+int elementMax(int *V, int n){
+	
+	int max = V[0];
+
+	for(int i = 1; i < n; i++)
+		if(V[i] > max)
+			max = V[i];
+
+	return max;
+}	
+
+int elementMin(int *V, int n){
+	
+	int min = V[0];
+
+	for(int i = 1; i < n; i++)
+		if(V[i] < min)
+			min = V[i];
+
+	return min;
+}
+//
 
 // Selection Sort
 void selectionSort(int *V, int n){
@@ -140,8 +191,8 @@ void quickSort(int *V, int inicio, int fim){
 		quickSort(V,pivo+1,fim);
 	}
 }
-// Heapsort
 
+// Heapsort
 void heapify(int head, int size, int* list){
 	
 	int max = head;
@@ -187,19 +238,120 @@ void heapSort(int* v, int n){
 		v[i] = aux;
 	}
 }
-void display( int *V, int n ){
+
+// Counting sort
+void countingSort(int *V, int n){
+
+	
+    int output[n];
+    int range, min, max;
+    min = elementMin(V,n);
+    max = elementMax(V,n);
+    range = max - min + 1;
+
+    int count[range] = {0}, i;
+ 
+    
+    for(i = 0; i < n; i++)
+        ++count[V[i]-min];
+ 
+    for (i = 1; i < range; i++)
+        count[i] += count[i-1];
+ 
+    for (i = 0; i < n; i++)
+    {
+        output[ count[ V[i] -min]-1] = V[i];
+        --count[V[i] - min];
+    }
+ 
+    for (i = 0; i < n; i++)
+        V[i] = output[i];
+    	
+    	
+    	
+}
+
+//Bucket sort
+void bucketSort(int *V, int n)
+{
+ 	
+    int max = elementMax(V,n); 
+    int min = elementMin(V,n);
+    int range = max - min + 1;
+
+	int num_buckets = n;
+	float bucket_size = float(range)/num_buckets;
+
+	vector<int> * buckets = new vector<int>[num_buckets];
 
 	for(int i = 0; i < n; i++){
-
-		printf("\n %d", V[i]);
+		int index = int((V[i]-min)/bucket_size);
+		buckets[index].push_back(V[i]);
 	}
-	printf("\n");
-}	
+
+	for(int i = 0; i < n; i++)
+		sort(buckets[i].begin(), buckets[i].end());
+
+	int index = 0;
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < buckets[i].size(); j++)
+          V[index++] = buckets[i][j];
+
+	delete[] buckets;
+}
+    
+
+//Radix sort 
+void countSort(int *V, int n, int exp)
+{
+    int output[n]; 
+    int i, count[10] = {0};
+ 
+    
+    for (i = 0; i < n; i++)
+        count[ (V[i]/exp)%10 ]++;
+ 
+    
+    for (i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+ 
+    
+    for (i = n - 1; i >= 0; i--)
+    {
+        output[count[ (V[i]/exp)%10 ] - 1] = V[i];
+        count[ (V[i]/exp)%10 ]--;
+    }
+ 
+    
+    for (i = 0; i < n; i++)
+        V[i] = output[i];
+}
 
 
+int getMax(int *V, int n)
+{
+    int max = V[0];
+    for (int i = 1; i < n; i++)
+        if (V[i] > max)
+            max = V[i];
+    return max;
+}
+
+void radixSort(int *V, int n)
+{
+    
+    int m = getMax(V, n);
+ 
+    for (int exp = 1; m/exp > 0; exp *= 10)
+        countSort(V, n, exp);
+}
+
+
+
+// Função principal
 int main(int argc, char * argv[]){
 
-	int  numero = 0;
+	int numero = 0;
 	int tamanho;
 
 	scanf("%d",&tamanho);
@@ -236,6 +388,22 @@ int main(int argc, char * argv[]){
 
 		case 5:
 			heapSort(vetor,tamanho);
+		break;
+
+		case 6:
+			qsort (vetor, tamanho, sizeof(int), compare);
+		break;
+
+		case 7:
+			countingSort(vetor, tamanho);
+		break;
+
+		case 8:
+			bucketSort(vetor, tamanho);
+		break;
+
+		case 9:
+			radixSort(vetor, tamanho);
 		break;
 
 		default:
